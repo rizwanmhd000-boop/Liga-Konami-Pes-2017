@@ -35,9 +35,8 @@
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 flex space-x-6 overflow-x-auto text-sm text-slate-400 font-medium">
             <button onclick="switchTab('klasemen')" id="tab-klasemen" class="py-3 px-2 active-tab whitespace-nowrap"><i class="fa-solid fa-trophy mr-1"></i> Klasemen</button>
-            <button onclick="switchTab('input-liga')" id="tab-input-liga" class="py-3 px-2 whitespace-nowrap"><i class="fa-solid fa-pen-to-square mr-1"></i> Input Hasil Liga</button>
+            <button onclick="switchTab('input-liga')" id="tab-input-liga" class="py-3 px-2 whitespace-nowrap"><i class="fa-solid fa-pen-to-square mr-1"></i> Input Liga & Penghargaan</button>
             <button onclick="switchTab('teams')" id="tab-teams" class="py-3 px-2 whitespace-nowrap"><i class="fa-solid fa-shield-halved mr-1"></i> Tim</button>
-            <button onclick="switchTab('awards')" id="tab-awards" class="py-3 px-2 whitespace-nowrap"><i class="fa-solid fa-award mr-1"></i> Top Skor & Penghargaan</button>
             <button onclick="switchTab('riwayat')" id="tab-riwayat" class="py-3 px-2 whitespace-nowrap"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Riwayat Juara</button>
         </div>
     </header>
@@ -70,12 +69,14 @@
             </div>
         </section>
 
-        <!-- TAB 2: INPUT HASIL LIGA -->
-        <section id="content-input-liga" class="tab-content hidden">
+        <!-- TAB 2: INPUT LIGA & PENGHARGAAN (GABUNGAN) -->
+        <section id="content-input-liga" class="tab-content hidden space-y-8">
+            
+            <!-- SECTION 1: HASIL MUSIM LIGA -->
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Form Add/Edit -->
+                <!-- Form Add/Edit Hasil Liga -->
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 h-fit">
-                    <h2 class="text-lg font-bold mb-4 text-blue-400" id="form-liga-title">Input Hasil Musim Liga</h2>
+                    <h2 class="text-lg font-bold mb-4 text-blue-400" id="form-liga-title"><i class="fa-solid fa-trophy mr-1"></i> Input Hasil Musim Liga</h2>
                     <form id="form-liga" onsubmit="saveHasilLiga(event)">
                         <input type="hidden" id="liga-row-id">
                         <div class="mb-4">
@@ -95,12 +96,13 @@
                             <select id="liga-j3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 select-team-options" required></select>
                         </div>
                         <div class="flex gap-2">
-                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition">Simpan</button>
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-lg text-sm transition">Simpan Hasil Liga</button>
                             <button type="button" onclick="resetFormLiga()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2.5 rounded-lg text-sm">Reset</button>
                         </div>
                     </form>
                 </div>
-                <!-- Data List -->
+
+                <!-- Data List Hasil Liga -->
                 <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
                     <h2 class="text-lg font-bold mb-4">Riwayat Data Musim</h2>
                     <div class="overflow-x-auto">
@@ -118,6 +120,70 @@
                                 <tr><td colspan="5" class="text-center p-4 text-slate-500">Memuat data...</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: TOP SKOR & PENGHARGAAN INDIVIDU -->
+            <div class="border-t border-slate-700/80 pt-8">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Form Add/Edit Penghargaan -->
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 h-fit">
+                        <h2 class="text-lg font-bold mb-4 text-purple-400" id="form-award-title"><i class="fa-solid fa-award mr-1"></i> Input Top Skor / Penghargaan</h2>
+                        <form id="form-award" onsubmit="saveAward(event)">
+                            <input type="hidden" id="award-row-id">
+                            <div class="mb-4">
+                                <label class="block text-xs text-slate-400 mb-1">Musim / Event</label>
+                                <input type="text" id="award-musim" placeholder="Contoh: Season 1 2026" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs text-slate-400 mb-1">Kategori Penghargaan</label>
+                                <select id="award-kategori" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200">
+                                    <option value="Top Skor">Top Skor</option>
+                                    <option value="Top Assist">Top Assist</option>
+                                    <option value="Pemain Terbaik">Pemain Terbaik</option>
+                                    <option value="Pelatih Terbaik">Pelatih Terbaik</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs text-slate-400 mb-1">Nama Orang / Pemain</label>
+                                <input type="text" id="award-nama" placeholder="Nama Pemain / Manager" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs text-slate-400 mb-1">Tim</label>
+                                <select id="award-team" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 select-team-options" required></select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs text-slate-400 mb-1">Statistik / Catatan (Opsional)</label>
+                                <input type="text" id="award-stat" placeholder="Contoh: 12 Gol / 8 Assist" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200">
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-medium py-2.5 rounded-lg text-sm transition">Simpan Penghargaan</button>
+                                <button type="button" onclick="resetFormAward()" class="bg-slate-700 hover:bg-slate-600 px-4 py-2.5 rounded-lg text-sm">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Data List Penghargaan -->
+                    <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h2 class="text-lg font-bold mb-4">Daftar Individu Terbaik</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="text-slate-400 border-b border-slate-700 text-xs uppercase">
+                                        <th class="pb-3">Musim</th>
+                                        <th class="pb-3">Kategori</th>
+                                        <th class="pb-3">Nama</th>
+                                        <th class="pb-3">Tim</th>
+                                        <th class="pb-3">Stat</th>
+                                        <th class="pb-3 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-awards-body" class="divide-y divide-slate-700/50">
+                                    <tr><td colspan="6" class="text-center p-4 text-slate-500">Memuat data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,65 +219,7 @@
             </div>
         </section>
 
-        <!-- TAB 4: TOP SKOR & PENGHARGAAN -->
-        <section id="content-awards" class="tab-content hidden">
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 h-fit">
-                    <h2 class="text-lg font-bold mb-4 text-blue-400" id="form-award-title">Input Top Skor / Penghargaan</h2>
-                    <form id="form-award" onsubmit="saveAward(event)">
-                        <input type="hidden" id="award-row-id">
-                        <div class="mb-4">
-                            <label class="block text-xs text-slate-400 mb-1">Kategori / Musim</label>
-                            <input type="text" id="award-musim" placeholder="Contoh: Season 1 2026" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-xs text-slate-400 mb-1">Kategori Penghargaan</label>
-                            <select id="award-kategori" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200">
-                                <option value="Top Skor">Top Skor</option>
-                                <option value="Top Assist">Top Assist</option>
-                                <option value="Pemain Terbaik">Pemain Terbaik</option>
-                                <option value="Pelatih Terbaik">Pelatih Terbaik</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-xs text-slate-400 mb-1">Nama Orang / Pemain</label>
-                            <input type="text" id="award-nama" placeholder="Nama Pemain / Manager" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-xs text-slate-400 mb-1">Tim</label>
-                            <select id="award-team" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 select-team-options" required></select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-xs text-slate-400 mb-1">Statistik / Catatan (Opsional)</label>
-                            <input type="text" id="award-stat" placeholder="Contoh: 12 Gol / 8 Assist" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200">
-                        </div>
-                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-medium py-2.5 rounded-lg text-sm transition">Simpan Penghargaan</button>
-                    </form>
-                </div>
-                <div class="md:col-span-2 bg-slate-800 p-6 rounded-xl border border-slate-700">
-                    <h2 class="text-lg font-bold mb-4">Daftar Individu Terbaik</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="text-slate-400 border-b border-slate-700 text-xs uppercase">
-                                    <th class="pb-3">Musim</th>
-                                    <th class="pb-3">Kategori</th>
-                                    <th class="pb-3">Nama</th>
-                                    <th class="pb-3">Tim</th>
-                                    <th class="pb-3">Stat</th>
-                                    <th class="pb-3 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-awards-body" class="divide-y divide-slate-700/50">
-                                <tr><td colspan="6" class="text-center p-4 text-slate-500">Memuat data...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: RIWAYAT JUARA -->
+        <!-- TAB 4: RIWAYAT JUARA -->
         <section id="content-riwayat" class="tab-content hidden">
             <h2 class="text-xl font-bold mb-4 text-slate-200 flex items-center gap-2"><i class="fa-solid fa-crown text-yellow-400"></i> Hall of Fame / Riwayat Juara Musim</h2>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="riwayat-cards-container">
@@ -236,11 +244,9 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // API Base URL bawaan menggunakan link Stein HQ milik Anda
         const DEFAULT_API_URL = 'https://api.steinhq.com/v1/storages/6a778a9e92b1163e972c2790';
         let STEIN_API_URL = localStorage.getItem('STEIN_API_URL') || DEFAULT_API_URL;
 
-        // App States
         let teamsData = [];
         let hasilLigaData = [];
         let awardsData = [];
@@ -291,7 +297,7 @@
 
                 renderAll();
             } catch (err) {
-                alert('Gagal mengambil data dari Stein HQ. Periksa koneksi atau pastikan nama sheet Google Sheets Anda sesuai (Teams, HasilLiga, Awards).');
+                alert('Gagal mengambil data dari Stein HQ. Periksa koneksi atau pastikan nama sheet Google Sheets Anda sesuai.');
                 console.error(err);
             }
         }
@@ -321,12 +327,10 @@
         function renderKlasemen() {
             const stats = {};
 
-            // Inisialisasi tim
             teamsData.forEach(t => {
                 stats[t.nama_team] = { logo: t.logo_url, j1: 0, j2: 0, j3: 0, poin: 0, tropi: 0 };
             });
 
-            // Hitung poin & tropi dari HasilLiga
             hasilLigaData.forEach(h => {
                 if (stats[h.juara1]) {
                     stats[h.juara1].j1 += 1;
@@ -343,7 +347,6 @@
                 }
             });
 
-            // Urutkan berdasarkan poin tertinggi
             const sorted = Object.keys(stats)
                 .map(name => ({ nama: name, ...stats[name] }))
                 .sort((a, b) => b.poin - a.poin || b.tropi - a.tropi || b.j1 - a.j1);
@@ -406,7 +409,7 @@
             document.getElementById('liga-j1').value = item.juara1;
             document.getElementById('liga-j2').value = item.juara2;
             document.getElementById('liga-j3').value = item.juara3;
-            document.getElementById('form-liga-title').innerText = 'Edit Hasil Liga';
+            document.getElementById('form-liga-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-1"></i> Edit Hasil Liga';
         }
 
         async function deleteHasilLiga(musim) {
@@ -422,7 +425,7 @@
         function resetFormLiga() {
             document.getElementById('form-liga').reset();
             document.getElementById('liga-row-id').value = '';
-            document.getElementById('form-liga-title').innerText = 'Input Hasil Musim Liga';
+            document.getElementById('form-liga-title').innerHTML = '<i class="fa-solid fa-trophy mr-1"></i> Input Hasil Musim Liga';
         }
 
         function renderHasilLigaTable() {
@@ -539,8 +542,20 @@
                     body: JSON.stringify([payload])
                 });
             }
-            document.getElementById('form-award').reset();
+            resetFormAward();
             fetchAllData();
+        }
+
+        function editAward(nama) {
+            const award = awardsData.find(a => a.nama === nama);
+            if (!award) return;
+            document.getElementById('award-row-id').value = award.nama;
+            document.getElementById('award-musim').value = award.musim;
+            document.getElementById('award-kategori').value = award.kategori;
+            document.getElementById('award-nama').value = award.nama;
+            document.getElementById('award-team').value = award.team;
+            document.getElementById('award-stat').value = award.stat || '';
+            document.getElementById('form-award-title').innerHTML = '<i class="fa-solid fa-pen-to-square mr-1"></i> Edit Penghargaan';
         }
 
         async function deleteAward(nama) {
@@ -551,6 +566,12 @@
                 body: JSON.stringify({ condition: { nama: nama } })
             });
             fetchAllData();
+        }
+
+        function resetFormAward() {
+            document.getElementById('form-award').reset();
+            document.getElementById('award-row-id').value = '';
+            document.getElementById('form-award-title').innerHTML = '<i class="fa-solid fa-award mr-1"></i> Input Top Skor / Penghargaan';
         }
 
         function renderAwardsTable() {
@@ -567,6 +588,7 @@
                     <td class="py-3 text-slate-300">${a.team}</td>
                     <td class="py-3 text-slate-400">${a.stat || '-'}</td>
                     <td class="py-3 text-right">
+                        <button onclick="editAward('${a.nama}')" class="text-blue-400 hover:text-blue-300 mr-2"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteAward('${a.nama}')" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
